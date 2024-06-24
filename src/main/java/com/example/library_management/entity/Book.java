@@ -17,6 +17,7 @@ public class Book {
     private String author;
     private String isbn;
     private boolean isAvailable;
+    private int copiesAvailable;
 
     @OneToMany(mappedBy = "book")
 private  List<BorrowRecord> borrowRecords;
