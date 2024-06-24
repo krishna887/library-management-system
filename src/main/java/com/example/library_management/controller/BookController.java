@@ -1,6 +1,7 @@
 package com.example.library_management.controller;
 
-import com.example.library_management.entity.Book;
+import com.example.library_management.dto.BookRequestDto;
+import com.example.library_management.dto.BookResponseDto;
 import com.example.library_management.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,30 +17,30 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @PostMapping("/")
-    public ResponseEntity<Book> createBook(@RequestBody Book book){
+    @PostMapping("/")//done by librarian
+    public ResponseEntity<BookResponseDto> createBook(@RequestBody BookRequestDto book){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(book));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")//done by librarian
     public ResponseEntity<?> deleteBook(@PathVariable long id){
         bookService.deleteBook(id);
         return ResponseEntity.status(HttpStatus.GONE).build();
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Book>updateBooks(@PathVariable long id, @RequestBody Book book){
+    @PutMapping("/{id}") //done by librarian
+    public ResponseEntity<BookResponseDto>updateBooks(@PathVariable long id, @RequestBody BookRequestDto book){
       return   ResponseEntity.ok().body(bookService.updateBook(id, book));
     }
-    @GetMapping("/findBooksByAuthor")
-    public ResponseEntity<List<Book>> findBooksByAuthor(@PathVariable String author){
+    @GetMapping("/findBooksByAuthor") //done by both
+    public ResponseEntity<List<BookResponseDto>> findBooksByAuthor(@RequestParam String author){
         return ResponseEntity.ok().body(bookService.findBookByAuthor(author));
     }
-    @GetMapping("/findBooksByTitle")
-    public ResponseEntity<List<Book>> findBooksByTitle(@PathVariable String title){
-        return ResponseEntity.ok().body(bookService.findBookByAuthor(title));
+    @GetMapping("/findBooksByTitle") //done by both
+    public ResponseEntity<List<BookResponseDto>> findBooksByTitle(@RequestParam String title){
+        return ResponseEntity.ok().body(bookService.findBookByTitle(title));
     }
-    @GetMapping("/findBooksByIsbn")
-    public ResponseEntity<List<Book>> findBooksByIsbn(@PathVariable String isbn){
-        return ResponseEntity.ok().body(bookService.findBookByAuthor(isbn));
+    @GetMapping("/findBooksByIsbn") // done by both
+    public ResponseEntity<List<BookResponseDto>> findBooksByIsbn(@RequestParam String isbn){
+        return ResponseEntity.ok().body(bookService.findBookByIsbn(isbn));
     }
 
 }
