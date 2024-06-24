@@ -3,6 +3,7 @@ package com.example.library_management.controller;
 import com.example.library_management.dto.AuthenticationResponse;
 import com.example.library_management.dto.LoginDto;
 import com.example.library_management.dto.UserDto;
+import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.entity.User;
 import com.example.library_management.service.AuthService;
 import com.example.library_management.service.UserService;
@@ -23,11 +24,11 @@ private final PasswordEncoder encoder;
         return ResponseEntity.ok(authService.authenticate(loginDto));
     }
     @PostMapping("register/student")
-    public ResponseEntity<User> registerUser(@RequestBody UserDto user){
+    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserDto user){
         return ResponseEntity.ok().body(userService.registerStudent(user));
     }
     @PutMapping("update/student")
-    public ResponseEntity<User> updateStudent(@RequestBody User user){
+    public ResponseEntity<UserResponseDto> updateStudent(@RequestBody User user){
         return ResponseEntity.ok().body(userService.updateUser(user));
     }
 

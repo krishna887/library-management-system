@@ -3,6 +3,7 @@ package com.example.library_management.config;
 import com.example.library_management.filter.JwtAuthFilter;
 import com.example.library_management.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,11 @@ import org.springframework.stereotype.Component;
 public class ConfigClass {
     private final CustomUserService customUserService;
    private final JwtAuthFilter jwtAuthFilter;
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
