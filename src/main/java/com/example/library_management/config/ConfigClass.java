@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -36,15 +37,15 @@ public class ConfigClass {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req-> req.requestMatchers("api/login/**","api/update/student/**")
-                        .permitAll()
-                        .requestMatchers("/api/register/student/**").hasAnyAuthority("LIBRARIAN")
-                        .requestMatchers("/hi").hasAnyAuthority("USER")
+                .authorizeHttpRequests(req-> req.requestMatchers("librarian/login/**","student/login/**","api/**").permitAll()
+//                        .requestMatchers("api/books/create/**","api/books/update/**","api/books/delete/**", "/api/register/student/**").hasAnyAuthority("LIBRARIAN")
+//                        .requestMatchers("api/books/findBooksByAuthor/**",
+//                                "api/books/findBooksByTitle", "api/books/findBooksByIsbn").hasAnyAuthority("STUDENT", "LIBRARIAN")
                         .anyRequest()
                         .authenticated())
-                .userDetailsService(
-                        customUserService
-                )
+//                .userDetailsService(
+//                        customUserService
+//                )
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

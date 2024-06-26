@@ -49,12 +49,12 @@ public class JwtService {
                 .getPayload();
     }
 
-    public String generateToken(LoginDto loginDto) {
+    public String generateToken(String  username) {
 
         String token = Jwts.builder()
-                .subject(loginDto.getUsername())
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))//for two minute
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))//for two minute
                 .signWith(getSigninKey())
                 .compact();
         return token;

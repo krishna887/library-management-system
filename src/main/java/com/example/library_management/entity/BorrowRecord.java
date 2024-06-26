@@ -28,8 +28,8 @@ public class BorrowRecord {
     private LocalDate returnDate;
     private boolean isReturned;
 
-    @OneToOne(mappedBy = "borrowRecord", cascade = CascadeType.ALL)
-    private Fine fine;
+    private double fineAmount;
+    private boolean finePaid;
 
 
 }

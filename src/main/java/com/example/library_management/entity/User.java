@@ -25,7 +25,6 @@ public class User implements UserDetails {
     private String email;
     private String name;
     private String contactDetails;
-    private boolean passwordChangeRequired;
 
     @Enumerated(EnumType.STRING)
     private Role role; // STUDENT, LIBRARIAN

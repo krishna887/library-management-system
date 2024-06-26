@@ -12,7 +12,6 @@ public class UserResponseDto {
     private  String email;
     private String name;
     private String contactDetails;
-    private boolean passwordChangeRequired;
     private Role role;
     private List<BorrowRecord>  borrowRecords;
     private List<ReservationRecord>  reservations;
