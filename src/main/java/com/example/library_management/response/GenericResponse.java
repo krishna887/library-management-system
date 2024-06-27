@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalTime;
 
 @Builder
@@ -20,14 +19,33 @@ public class GenericResponse<T> {
 
 
     public static <T> GenericResponse<T> empty(String message, HttpStatus httpStatus, int statusCode) {
-        return GenericResponse.<T>builder().message(message).httpStatus(httpStatus).StatusCode(statusCode).updatedTime(LocalTime.now()).status(true).build();
+        return GenericResponse.<T>builder()
+                .message(message)
+                .httpStatus(httpStatus)
+                .StatusCode(statusCode)
+                .updatedTime(LocalTime.now())
+                .status(true)
+                .build();
     }
 
     public static <T> GenericResponse<T> success(T data, String message, HttpStatus httpStatus, int statusCode) {
-        return GenericResponse.<T>builder().message(message).httpStatus(httpStatus).StatusCode(statusCode).status(true).updatedTime(LocalTime.now()).data(data).build();
+        return GenericResponse.<T>builder()
+                .message(message)
+                .httpStatus(httpStatus)
+                .StatusCode(statusCode)
+                .status(true)
+                .updatedTime(LocalTime.now())
+                .data(data)
+                .build();
     }
 
-    public static <T> GenericResponse<T> error(String message) {
-        return GenericResponse.<T>builder().message(message).status(false).data(null).build();
+    public static <T> GenericResponse<T> error(String message,HttpStatus httpStatus, int statusCode) {
+        return GenericResponse.<T>builder()
+                .message(message)
+                .httpStatus(httpStatus)
+                .StatusCode(statusCode)
+                .updatedTime(LocalTime.now())
+                .status(false)
+                .build();
     }
 }

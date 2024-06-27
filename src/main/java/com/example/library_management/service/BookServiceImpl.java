@@ -3,6 +3,7 @@ package com.example.library_management.service;
 import com.example.library_management.dto.BookRequestDto;
 import com.example.library_management.dto.BookResponseDto;
 import com.example.library_management.entity.Book;
+import com.example.library_management.exception.CustomIllegalStateException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class BookServiceImpl implements BookService {
         Book existingBook = bookRepository.findByTitleAndAuthorAndIsbn(dto.getTitle(), dto.getAuthor(), dto.getIsbn());
         if (existingBook != null && existingBook.isAvailable()) {
             if (existingBook.getCopiesAvailable() < dto.getCopiesAvailable()) {
-                throw new IllegalStateException("There is no enough books to delete");
+                throw new CustomIllegalStateException("There is no enough books to delete");
             }
             existingBook.setCopiesAvailable(existingBook.getCopiesAvailable() - dto.getCopiesAvailable());
             if (existingBook.getCopiesAvailable() == 0) {

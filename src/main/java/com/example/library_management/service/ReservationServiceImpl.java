@@ -4,6 +4,7 @@ import com.example.library_management.dto.ReservationRecordDto;
 import com.example.library_management.entity.Book;
 import com.example.library_management.entity.ReservationRecord;
 import com.example.library_management.entity.User;
+import com.example.library_management.exception.CustomIllegalStateException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.ReservationRecordRepository;
@@ -29,20 +30,20 @@ public class ReservationServiceImpl implements ReservationRecordService {
     @Override
     public ReservationRecordDto reserveBook(Long userId, Long bookId) {
         if (borrowRecordService.getTotalFines(userId) >= 500) {
-            throw new IllegalStateException("Cannot reserve books with fines >= 500");
+            throw new CustomIllegalStateException("Cannot reserve books with fines >= 500");
 
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
         if (book.getCopiesAvailable() > 0) {
-            throw new IllegalStateException("Book is available. No need to reserve.");
+            throw new CustomIllegalStateException("Book is available. No need to reserve.");
         }
 
         Optional<ReservationRecord> existingReservation = reservationRepository.findByBookIdAndActiveTrue(bookId).stream().filter(reservation -> reservation.getUser().getId().equals(userId)).findFirst();
 
         if (existingReservation.isPresent()) {
-            throw new IllegalStateException("You have already reserved this book.");
+            throw new CustomIllegalStateException("You have already reserved this book.");
         }
 
         ReservationRecord reservation = new ReservationRecord();

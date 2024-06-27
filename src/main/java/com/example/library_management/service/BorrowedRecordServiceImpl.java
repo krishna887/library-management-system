@@ -4,6 +4,7 @@ import com.example.library_management.dto.BorrowRecordDto;
 import com.example.library_management.entity.Book;
 import com.example.library_management.entity.BorrowRecord;
 import com.example.library_management.entity.User;
+import com.example.library_management.exception.CustomIllegalStateException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.BorrowRecordRepository;
@@ -94,7 +95,7 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
         BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId).orElseThrow(() -> new ResourceNotFoundException("Borrow record not found"));
 
         if (borrowRecord.getFineAmount() <= 0) {
-            throw new IllegalStateException("No fine to pay");
+            throw new CustomIllegalStateException("No fine to pay");
         }
 
         borrowRecord.setFinePaid(true);
