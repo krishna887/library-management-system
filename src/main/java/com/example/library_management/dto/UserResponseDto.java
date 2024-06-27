@@ -6,14 +6,15 @@ import com.example.library_management.entity.Role;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class UserResponseDto {
     private String username;
-    private  String email;
+    private String email;
     private String name;
     private String contactDetails;
     private Role role;
-    private List<BorrowRecord>  borrowRecords;
-    private List<ReservationRecord>  reservations;
+    private List<BorrowRecord> borrowRecords;
+    private List<ReservationRecord> reservations;
 
 }

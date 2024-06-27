@@ -1,21 +1,26 @@
 package com.example.library_management.service;
 
-import com.example.library_management.entity.BorrowRecord;
+import com.example.library_management.dto.BorrowRecordDto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface BorrowRecordService {
 
-   BorrowRecord borrow(long userId, long bookId);
-    BorrowRecord returnBook(long userId, long bookId);
-   boolean checkAvailable(long bookId);
+    BorrowRecordDto borrow(long userId, long bookId);
 
-  List< BorrowRecord > viewBorrowRecords(long userId);
-     double getTotalFines(Long userId);
-     BorrowRecord payFine(Long borrowRecordId);
-     double calculateFine(LocalDate borrowDate, LocalDate returnDate);
-     List<BorrowRecord> getUserFines(Long userId);
+    BorrowRecordDto returnBook(long userId, long bookId);
+
+    boolean checkAvailable(long bookId);
+
+    List<BorrowRecordDto> viewBorrowRecords(long userId);
+
+    Double getTotalFines(Long userId);
+
+    BorrowRecordDto payFine(Long borrowRecordId);
+
+    Double calculateFine(long borrowId);
+
+    List<BorrowRecordDto> getUserFines(Long userId);
 
 }
 

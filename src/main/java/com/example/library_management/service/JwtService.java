@@ -1,6 +1,5 @@
 package com.example.library_management.service;
 
-import com.example.library_management.dto.LoginDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -41,22 +40,13 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parser()
-                .verifyWith(getSigninKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().verifyWith(getSigninKey()).build().parseSignedClaims(token).getPayload();
     }
 
-    public String generateToken(String  username) {
+    public String generateToken(String username) {
 
-        String token = Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))//for two minute
-                .signWith(getSigninKey())
-                .compact();
+        String token = Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))//for two minute
+                .signWith(getSigninKey()).compact();
         return token;
     }
 

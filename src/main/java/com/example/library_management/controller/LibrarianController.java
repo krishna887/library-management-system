@@ -6,12 +6,14 @@ import com.example.library_management.dto.UserDto;
 import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.response.GenericResponse;
 import com.example.library_management.service.AuthService;
-import com.example.library_management.service.JwtService;
 import com.example.library_management.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,19 +27,12 @@ public class LibrarianController {
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> login(@RequestBody LoginDto loginDto) {
 
-       AuthResponseDto authResponseDto= authService.authenticateLibrarian(loginDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Authentication", authResponseDto.getToken() )
-                .body(GenericResponse.empty("Librarian login Success",HttpStatus.CREATED, HttpStatus.CREATED.value()));
+        AuthResponseDto authResponseDto = authService.authenticateLibrarian(loginDto);
+        return ResponseEntity.status(HttpStatus.CREATED).header("Authentication", authResponseDto.getToken()).body(GenericResponse.empty("Librarian login Success", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
+
     @PostMapping("/register/student")
-    public ResponseEntity<GenericResponse<UserResponseDto>> registerUser(@RequestBody UserDto user){
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .header("custom","custom header")
-                .body(GenericResponse.success(userService.registerStudent(user),"Student Register Successful",HttpStatus.CREATED, HttpStatus.CREATED.value()));
-
+    public ResponseEntity<GenericResponse<UserResponseDto>> registerUser(@RequestBody UserDto user) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userService.registerStudent(user), "Student Register Successful", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
-
-
-
 }

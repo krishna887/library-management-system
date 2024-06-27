@@ -19,32 +19,15 @@ public class GenericResponse<T> {
     private T data;
 
 
-    public static <T> GenericResponse<T> empty(String message,HttpStatus httpStatus, int statusCode) {
-        return GenericResponse.<T>builder()
-                .message(message)
-                .httpStatus(httpStatus)
-                .StatusCode(statusCode)
-                .updatedTime(LocalTime.now())
-                .status(true)
-                .build();
+    public static <T> GenericResponse<T> empty(String message, HttpStatus httpStatus, int statusCode) {
+        return GenericResponse.<T>builder().message(message).httpStatus(httpStatus).StatusCode(statusCode).updatedTime(LocalTime.now()).status(true).build();
     }
 
-    public static <T> GenericResponse<T> success(T data, String message ,HttpStatus httpStatus, int statusCode) {
-        return GenericResponse.<T>builder()
-                .message(message)
-                .httpStatus(httpStatus)
-                .StatusCode(statusCode)
-                .status(true)
-                .updatedTime(LocalTime.now())
-                .data(data)
-                .build();
+    public static <T> GenericResponse<T> success(T data, String message, HttpStatus httpStatus, int statusCode) {
+        return GenericResponse.<T>builder().message(message).httpStatus(httpStatus).StatusCode(statusCode).status(true).updatedTime(LocalTime.now()).data(data).build();
     }
 
     public static <T> GenericResponse<T> error(String message) {
-        return GenericResponse.<T>builder()
-                .message(message)
-                .status(false)
-                .data(null)
-                .build();
+        return GenericResponse.<T>builder().message(message).status(false).data(null).build();
     }
 }

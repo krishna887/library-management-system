@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +23,7 @@ public class Book {
     private int copiesAvailable;
 
     @OneToMany(mappedBy = "book")
-private  List<BorrowRecord> borrowRecords;
+    private List<BorrowRecord> borrowRecords;
 
     @OneToMany(mappedBy = "book")
     private List<ReservationRecord> reservations;

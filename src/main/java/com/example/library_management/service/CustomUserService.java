@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class CustomUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("user not find of this type"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not find of this type"));
     }
 }

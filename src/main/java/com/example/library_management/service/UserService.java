@@ -6,7 +6,8 @@ import com.example.library_management.entity.User;
 
 
 public interface UserService {
-     UserResponseDto registerStudent(UserDto userDto);
-     UserResponseDto updateUser(User updatedUser);
+    UserResponseDto registerStudent(UserDto userDto);
+
+    UserResponseDto updateUser(User updatedUser);
 
 }

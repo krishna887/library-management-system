@@ -1,6 +1,8 @@
 package com.example.library_management.controller;
 
-import com.example.library_management.dto.*;
+import com.example.library_management.dto.AuthResponseDto;
+import com.example.library_management.dto.LoginDto;
+import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.entity.User;
 import com.example.library_management.response.GenericResponse;
 import com.example.library_management.service.AuthService;
@@ -20,16 +22,13 @@ public class StudentController {
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> studentLogin(@RequestBody LoginDto loginDto) {
 
-        AuthResponseDto authResponseDto= authService.authenticateUser(loginDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Authentication", authResponseDto.getToken() )
-                .body(GenericResponse.empty("Student Login Success",HttpStatus.CREATED, HttpStatus.CREATED.value()));
+        AuthResponseDto authResponseDto = authService.authenticateUser(loginDto);
+        return ResponseEntity.status(HttpStatus.CREATED).header("Authentication", authResponseDto.getToken()).body(GenericResponse.empty("Student Login Success", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
+
     @PutMapping("/update")
-    public ResponseEntity<GenericResponse<UserResponseDto>> updateStudent(@RequestBody User user){
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .header("custom","custom header")
-                .body(GenericResponse.success(userServiceImpl.updateUser(user),"Student updated Successfully",HttpStatus.ACCEPTED, HttpStatus.ACCEPTED.value()));
+    public ResponseEntity<GenericResponse<UserResponseDto>> updateStudent(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userServiceImpl.updateUser(user), "Student updated Successfully", HttpStatus.ACCEPTED, HttpStatus.ACCEPTED.value()));
 
     }
 
