@@ -2,7 +2,7 @@ package com.example.library_management.controller;
 
 import com.example.library_management.dto.BookRequestDto;
 import com.example.library_management.dto.BookResponseDto;
-import com.example.library_management.response.GenericResponse;
+import com.example.library_management.util.GenericResponse;
 import com.example.library_management.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

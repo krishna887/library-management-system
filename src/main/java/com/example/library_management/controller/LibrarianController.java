@@ -4,7 +4,7 @@ import com.example.library_management.dto.AuthResponseDto;
 import com.example.library_management.dto.LoginDto;
 import com.example.library_management.dto.UserDto;
 import com.example.library_management.dto.UserResponseDto;
-import com.example.library_management.response.GenericResponse;
+import com.example.library_management.util.GenericResponse;
 import com.example.library_management.service.AuthService;
 import com.example.library_management.service.UserService;
 import jakarta.validation.Valid;

@@ -1,6 +1,6 @@
 package com.example.library_management.exception;
 
-import com.example.library_management.response.GenericResponse;
+import com.example.library_management.util.GenericResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

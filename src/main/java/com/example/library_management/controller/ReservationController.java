@@ -1,10 +1,8 @@
 package com.example.library_management.controller;
 
 import com.example.library_management.dto.ReservationRecordDto;
-import com.example.library_management.response.GenericResponse;
-import com.example.library_management.service.BookService;
+import com.example.library_management.util.GenericResponse;
 import com.example.library_management.service.ReservationRecordService;
-import com.example.library_management.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

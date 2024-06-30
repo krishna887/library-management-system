@@ -6,14 +6,17 @@ import lombok.Data;
 
 @Data
 public class BookRequestDto {
-    @NotNull @NotEmpty
+    @NotNull(message = "Title Should not be Null")
+    @NotEmpty(message = "Title Should not be Empty")
     private String title;
-    @NotNull @NotEmpty
+    @NotNull(message = "Author Should not be Null")
+    @NotEmpty(message = "Author Should not be Empty")
     private String author;
-    @NotNull @NotEmpty
+    @NotNull(message = "Isbn Should not be Null")
+    @NotEmpty(message = "Isbn Should not be Empty")
     private String isbn;
-    @NotNull @NotEmpty
+
     private boolean isAvailable;
-    @NotNull @NotEmpty
+
     private int copiesAvailable;
 }

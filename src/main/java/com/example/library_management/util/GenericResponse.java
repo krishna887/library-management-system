@@ -1,4 +1,4 @@
-package com.example.library_management.response;
+package com.example.library_management.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
