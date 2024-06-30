@@ -17,8 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FineController {
     private final BorrowRecordService borrowRecordService;
-    private final UserService userService;
-    private final BookService bookService;
+
 
     @GetMapping("/calculate/fine")
     ResponseEntity<GenericResponse<Double>> calculateFine(@RequestParam long borrowId) {

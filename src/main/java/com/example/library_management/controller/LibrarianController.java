@@ -7,6 +7,7 @@ import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.response.GenericResponse;
 import com.example.library_management.service.AuthService;
 import com.example.library_management.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,14 @@ public class LibrarianController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse<AuthResponseDto>> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<GenericResponse<AuthResponseDto>> login(@Valid @RequestBody LoginDto loginDto) {
 
         AuthResponseDto authResponseDto = authService.authenticateLibrarian(loginDto);
         return ResponseEntity.status(HttpStatus.CREATED).header("Authentication", authResponseDto.getToken()).body(GenericResponse.empty("Librarian login Success", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
 
     @PostMapping("/register/student")
-    public ResponseEntity<GenericResponse<UserResponseDto>> registerUser(@RequestBody UserDto user) {
+    public ResponseEntity<GenericResponse<UserResponseDto>> registerUser(@Valid @RequestBody UserDto user) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userService.registerStudent(user), "Student Register Successful", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
 }

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BorrowRecordController {
     private final BorrowRecordService borrowRecordService;
-    private final UserService userService;
-    private final BookService bookService;
 
     @PostMapping("/borrow")
     public ResponseEntity<GenericResponse<BorrowRecordDto>> borrow(@RequestParam long userId, @RequestParam long bookId){
@@ -41,7 +39,4 @@ public class BorrowRecordController {
     public ResponseEntity<GenericResponse<?>> getBorrowRecord(@RequestParam long userId) {
         return ResponseEntity.status(HttpStatus.CREATED).header("borrow_record", "borrow _record _created _header").body(GenericResponse.success(borrowRecordService.viewBorrowRecords(userId), "Get borrow Record By User Id ", HttpStatus.OK, HttpStatus.OK.value()));
     }
-
-
-
 }

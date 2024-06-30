@@ -1,6 +1,7 @@
 package com.example.library_management.service;
 
 import com.example.library_management.dto.UserDto;
+import com.example.library_management.dto.UserEditDto;
 import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.entity.Role;
 import com.example.library_management.entity.User;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public UserResponseDto updateUser(User updatedUser) {
+    public UserResponseDto updateUser(UserEditDto updatedUser) {
         User user = userRepository.findByUsername(updatedUser.getUsername()).map(usr -> {
             usr.setEmail(updatedUser.getEmail());
             usr.setPassword(passwordEncoder.encode(updatedUser.getPassword()));

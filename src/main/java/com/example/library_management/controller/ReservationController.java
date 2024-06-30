@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ReservationController {
     private final ReservationRecordService reservationRecordService;
-    private final UserService userService;
-    private final BookService bookService;
 
     @PostMapping("/reserve")
     public ResponseEntity<GenericResponse<ReservationRecordDto>> borrow(@RequestParam long userId, @RequestParam long bookId) {

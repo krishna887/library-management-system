@@ -5,11 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class UserDto {
-    @NotNull @NotEmpty
-    private String email;
+public class UserEditDto {
     @NotNull @NotEmpty
     private String username;
     @NotNull @NotEmpty
+    private String password;
+    @NotNull @NotEmpty
+    private String email;
+    @NotNull @NotEmpty
+    private String name;
+    @NotNull @NotEmpty
     private String contactDetails;
+
 }
