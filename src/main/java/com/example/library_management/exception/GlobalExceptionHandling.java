@@ -1,0 +1,50 @@
+package com.example.library_management.exception;
+
+import com.example.library_management.util.GenericResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.stream.Collectors;
+
+@ControllerAdvice
+public class GlobalExceptionHandling {
+
+    @ExceptionHandler(CustomIllegalStateException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(CustomIllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("illegal_state_exception","illegal state exception handling")
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("resource_not_found_exception","Resource not found exception handling")
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(UsernameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("user-name- not-found-ecception","User name not found exception handling")
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(MethodArgumentNotValidException e, BindingResult bindingResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("Method Argument not valid","User name not found exception handling")
+                .body(GenericResponse.error(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining()), HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()));
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("Method Argument not valid","User name not found exception handling")
+                .body(GenericResponse.empty(e.getMessage(), HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()));
+    }
+
+}

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,15 +22,15 @@ public class BorrowRecord {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "book_id",nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     private LocalDate borrowDate;
     private LocalDate returnDate;
     private boolean isReturned;
 
-    @OneToOne(mappedBy = "borrowRecord", cascade = CascadeType.ALL)
-    private Fine fine;
+    private double fineAmount;
+    private boolean finePaid;
 
 
 }

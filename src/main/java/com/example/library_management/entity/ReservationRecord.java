@@ -25,6 +25,7 @@ public class ReservationRecord {
 
     private LocalDate reservationDate;
     private boolean isCancelled;
+    private boolean active;
 
 
 }
