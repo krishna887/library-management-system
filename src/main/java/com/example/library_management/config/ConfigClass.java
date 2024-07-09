@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class ConfigClass {
-    private final CustomUserService customUserService;
     private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
@@ -31,7 +30,8 @@ public class ConfigClass {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(req -> req.requestMatchers("librarian/login/**", "student/login/**", "/error/**").permitAll()
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req -> req.requestMatchers("librarian/login/**", "student/login/**", "/error/**").permitAll()
 //                        .requestMatchers("api/books/create/**","api/books/update/**","api/books/delete/**", "/api/register/student/**").hasAnyAuthority("LIBRARIAN")
 //                        .requestMatchers("api/books/findBooksByAuthor/**",
 //                                "api/books/findBooksByTitle", "api/books/findBooksByIsbn").hasAnyAuthority("STUDENT", "LIBRARIAN")
