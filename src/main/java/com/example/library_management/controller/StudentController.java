@@ -12,14 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
 public class StudentController {
     private final AuthService authService;
     private final UserServiceImpl userServiceImpl;
-
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> studentLogin( @Valid @RequestBody LoginDto loginDto) {
 

@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/librarian")
@@ -21,7 +20,6 @@ public class LibrarianController {
     //$2a$10$EvGesuRsmTihQ1K4i0WeCuVna4ya6BXqEZblury
     private final AuthService authService;
     private final UserService userService;
-
 
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> login(@Valid @RequestBody LoginDto loginDto) {
