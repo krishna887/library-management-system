@@ -11,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ public class LibrarianController {
     //$2a$10$EvGesuRsmTihQ1K4i0WeCuVna4ya6BXqEZblury
     private final AuthService authService;
     private final UserService userService;
-
 
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> login(@Valid @RequestBody LoginDto loginDto) {

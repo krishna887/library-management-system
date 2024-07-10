@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     private final AuthService authService;
     private final UserServiceImpl userServiceImpl;
-
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> studentLogin( @Valid @RequestBody LoginDto loginDto) {
 
