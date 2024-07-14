@@ -8,6 +8,9 @@ import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -89,4 +92,22 @@ public class BookServiceImpl implements BookService {
         return bookList.stream().map(book -> modelMapper.map(book, BookResponseDto.class)).collect(Collectors.toList());
 
     }
+
+    @Override
+    public Page<BookResponseDto> findAllBooks(int pageNo, int pageSize) {
+      Pageable pageable = PageRequest.of(pageNo, pageSize);
+      Page<Book> books= bookRepository.findAll(pageable);
+      Page<BookResponseDto> bookResponseDtos= books.map(book -> modelMapper.map(book,BookResponseDto.class));
+        return bookResponseDtos;
+    }
+
+
+//    @Override
+//    public Page<BookResponseDto> findAllBooks(int pageNo , int pageSize) {
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//
+//      Page<Book> books= bookRepository.findAll(pageable);
+//      Page<BookResponseDto> bookResponses= books.stream().map(book -> modelMapper.(book,BookResponseDto.class)).collect(Collectors.);
+//
+//    }
 }

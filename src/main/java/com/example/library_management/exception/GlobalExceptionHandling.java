@@ -1,14 +1,19 @@
 package com.example.library_management.exception;
 
 import com.example.library_management.util.GenericResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.stream.Collectors;
@@ -44,7 +49,27 @@ public class GlobalExceptionHandling {
     public ResponseEntity<GenericResponse<String>> handleException(MethodArgumentTypeMismatchException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .header("Method Argument not valid","User name not found exception handling")
-                .body(GenericResponse.empty(e.getMessage(), HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()));
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()));
     }
-
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .header("User not matched","User not found")
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value()));
+    }
+//    @ExceptionHandler(value = {ExpiredJwtException.class})
+//    public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
+////        String requestUri = ((ServletWebRequest)request).getRequest().getRequestURI().toString();
+////        ExceptionMessage exceptionMessage = new ExceptionMessage(ex.getMessage(), requestUri);
+//        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                .header("User not matched","User not found")
+//                .body(GenericResponse.error(ex.getMessage(), HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value()));
+//    }
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<Object> handleOtherExceptions(Exception ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .header("User not matched","User not found")
+                .body(GenericResponse.error(ex.getMessage(), HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value()));
+    }
 }
+

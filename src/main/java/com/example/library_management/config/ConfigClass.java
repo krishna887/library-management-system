@@ -36,7 +36,12 @@ public class ConfigClass {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req.requestMatchers("librarian/login/**", "student/login/**", "/error/**").permitAll()
+                        .requestMatchers("student/update","api/borrow","api/return","api/pay/fine","api/reserve").hasRole("STUDENT")
+                        .requestMatchers("librarian/register/student","api/books/create","api/books/update/{id}","api/books/delete","api/books/find-all-books",
+                                "api/all-borrow-record","api/calculate/fine","api/all/fines","api/all_reservation_record").hasRole("LIBRARIAN")
                         .anyRequest().authenticated())
+//                .exceptionHandling().authenticationEntryPoint(entryPoint)
+
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
 
