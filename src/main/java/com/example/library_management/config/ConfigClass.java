@@ -1,10 +1,12 @@
 package com.example.library_management.config;
 
 import com.example.library_management.filter.JwtAuthFilter;
+import com.example.library_management.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -25,7 +28,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConfigClass {
     private final JwtAuthFilter jwtAuthFilter;
-
+    private final CustomUserService userService;
+private final CustomAccessDeniedHandler customAccessDeniedHandler;
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -36,13 +40,25 @@ public class ConfigClass {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req.requestMatchers("librarian/login/**", "student/login/**", "/error/**").permitAll()
-                        .requestMatchers("student/update","api/borrow","api/return","api/pay/fine","api/reserve").hasRole("STUDENT")
-                        .requestMatchers("librarian/register/student","api/books/create","api/books/update/{id}","api/books/delete","api/books/find-all-books",
-                                "api/all-borrow-record","api/calculate/fine","api/all/fines","api/all_reservation_record").hasRole("LIBRARIAN")
+                        .requestMatchers("student/update",
+                                "api/borrow",
+                                "api/return",
+                                "api/pay/fine",
+                                "api/reserve").hasAuthority("STUDENT")
+                        .requestMatchers("librarian/register/student",
+                                "api/books/create",
+                                "api/books/update/{id}",
+                                "api/books/delete",
+                                "api/books/find-all-books",
+                                "api/all-borrow-record",
+                                "api/calculate/fine",
+                                "api/all/fines",
+                                "api/reserve/cancel",
+                                "api/all_reservation_record").hasAuthority("LIBRARIAN")
                         .anyRequest().authenticated())
-//                .exceptionHandling().authenticationEntryPoint(entryPoint)
-
-
+                .userDetailsService(userService)
+                .exceptionHandling(e->e.accessDeniedHandler(customAccessDeniedHandler)
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
 
     }

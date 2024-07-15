@@ -28,7 +28,6 @@ public class StudentController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<GenericResponse<UserResponseDto>> updateStudent(@Valid @RequestBody UserEditDto user) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userServiceImpl.updateUser(user), "Student updated Successfully", HttpStatus.ACCEPTED, HttpStatus.ACCEPTED.value()));
 

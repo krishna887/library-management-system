@@ -5,6 +5,7 @@ import com.example.library_management.entity.Book;
 import com.example.library_management.entity.ReservationRecord;
 import com.example.library_management.entity.User;
 import com.example.library_management.exception.CustomIllegalStateException;
+import com.example.library_management.exception.NotLoggedInUserException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.ReservationRecordRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,9 +28,14 @@ public class ReservationServiceImpl implements ReservationRecordService {
     private final BookRepository bookRepository;
     private final BorrowRecordService borrowRecordService;
     private final ModelMapper mapper;
+    private  final CheckLoginService checkLoginService;
 
     @Override
     public ReservationRecordDto reserveBook(Long userId, Long bookId) {
+       User authenticatedUser= userRepository.findByUsername( checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()->new ResourceNotFoundException("User is Not found of this name "));
+       if(!Objects.equals(authenticatedUser.getId(), userId)){
+           throw  new NotLoggedInUserException("User is not Logged In");
+       }
         if (borrowRecordService.getTotalFines(userId) >= 500) {
             throw new CustomIllegalStateException("Cannot reserve books with fines >= 500");
 
