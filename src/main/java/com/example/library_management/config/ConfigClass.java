@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,6 +31,7 @@ public class ConfigClass {
     private final JwtAuthFilter jwtAuthFilter;
     private final CustomUserService userService;
 private final CustomAccessDeniedHandler customAccessDeniedHandler;
+private  final  CustomLogOutHandler customLogOutHandler;
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -59,7 +61,9 @@ private final CustomAccessDeniedHandler customAccessDeniedHandler;
                 .userDetailsService(userService)
                 .exceptionHandling(e->e.accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(l->l.logoutUrl("/logout").addLogoutHandler(customLogOutHandler).logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext())))
+                .build();
 
     }
     @Bean
