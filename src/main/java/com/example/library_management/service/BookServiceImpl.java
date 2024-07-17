@@ -3,11 +3,17 @@ package com.example.library_management.service;
 import com.example.library_management.dto.BookRequestDto;
 import com.example.library_management.dto.BookResponseDto;
 import com.example.library_management.entity.Book;
+import com.example.library_management.entity.User;
 import com.example.library_management.exception.CustomIllegalStateException;
+import com.example.library_management.exception.NotLoggedInUserException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
+import com.example.library_management.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +25,8 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private  final CheckLoginService checkLoginService;
 
 
     public BookResponseDto createBook(BookRequestDto dto) {
@@ -73,6 +81,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookResponseDto> findBookByTitle(String title) {
+        User authenticatedUser=  userRepository.findByUsername(checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()-> new ResourceNotFoundException("User of this name is not found"));
 
         List<Book> bookList = bookRepository.findByTitleContaining(title);
         return bookList.stream().map(book -> modelMapper.map(book, BookResponseDto.class)).collect(Collectors.toList());
@@ -89,4 +98,20 @@ public class BookServiceImpl implements BookService {
         return bookList.stream().map(book -> modelMapper.map(book, BookResponseDto.class)).collect(Collectors.toList());
 
     }
+
+    @Override
+    public Page<BookResponseDto> findAllBooks(int pageNo, int pageSize) {
+      Pageable pageable = PageRequest.of(pageNo, pageSize);
+      Page<Book> books= bookRepository.findAll(pageable);
+        return books.map(book -> modelMapper.map(book,BookResponseDto.class));
+    }
+
+    @Override
+    public List<BookResponseDto> findAllBooks() {
+        List<Book> bookList = bookRepository.findAll();
+        return bookList.stream().map(book -> modelMapper.map(book, BookResponseDto.class)).collect(Collectors.toList());
+
+    }
+
+
 }

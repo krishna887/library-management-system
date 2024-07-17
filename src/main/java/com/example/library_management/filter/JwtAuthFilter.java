@@ -2,6 +2,8 @@ package com.example.library_management.filter;
 
 import com.example.library_management.service.CustomUserService;
 import com.example.library_management.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final CustomUserService userService;
 
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
@@ -31,23 +34,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+try {
+    String token = authHeader.substring(7);
+    String username = jwtService.extractUsername(token);
 
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = userService.loadUserByUsername(username);
+        UserDetails userDetails = userService.loadUserByUsername(username);
 
 
-            if (jwtService.isValid(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        if (jwtService.isValid(token, userDetails)) {
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+    }
+}catch (MalformedJwtException | ExpiredJwtException ex) {
+//    throw  ex;
+    // Handle malformed token gracefully
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//    response.sendError(401,"Token is expired or Invalid");
+
+}
+
         filterChain.doFilter(request, response);
     }
 }

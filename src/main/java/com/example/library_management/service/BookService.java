@@ -2,6 +2,7 @@ package com.example.library_management.service;
 
 import com.example.library_management.dto.BookRequestDto;
 import com.example.library_management.dto.BookResponseDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface BookService {
     List<BookResponseDto> findBookByAuthor(String author);
 
     List<BookResponseDto> findBookByIsbn(String isbn);
+
+    Page<BookResponseDto> findAllBooks(int pageNo, int pageSize);
+    List<BookResponseDto> findAllBooks();
 }

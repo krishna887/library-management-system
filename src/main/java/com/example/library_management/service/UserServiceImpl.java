@@ -5,13 +5,21 @@ import com.example.library_management.dto.UserEditDto;
 import com.example.library_management.dto.UserResponseDto;
 import com.example.library_management.entity.Role;
 import com.example.library_management.entity.User;
+import com.example.library_management.exception.AlreadyExistException;
+import com.example.library_management.exception.NotLoggedInUserException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.FileAlreadyExistsException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -21,8 +29,12 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final ModelMapper modelMapper;
+    private  final  CheckLoginService checkLoginService;
 
     public UserResponseDto registerStudent(UserDto userDto) {
+        if ( userRepository.existsByUsername(userDto.getUsername())) {
+            throw  new AlreadyExistException("User of this username Already exist");
+        }
         User user = new User();
         String password = generatePassword();
         user.setPassword(passwordEncoder.encode(password));
@@ -37,6 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseDto updateUser(UserEditDto updatedUser) {
+// user should have logged in first
+        if( !Objects.equals(checkLoginService.getCurrentAuthenticatedUsername(), updatedUser.getUsername())){
+            throw new NotLoggedInUserException("User Can Update Owns details Only" );
+
+        }
         User user = userRepository.findByUsername(updatedUser.getUsername()).map(usr -> {
             usr.setEmail(updatedUser.getEmail());
             usr.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -46,6 +63,7 @@ public class UserServiceImpl implements UserService {
         }).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return modelMapper.map(user, UserResponseDto.class);
     }
+
 
     private String generatePassword() {
         return UUID.randomUUID().toString().replace('-', '.').substring(0, 8);

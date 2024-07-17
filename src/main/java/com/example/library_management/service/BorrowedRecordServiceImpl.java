@@ -5,17 +5,21 @@ import com.example.library_management.entity.Book;
 import com.example.library_management.entity.BorrowRecord;
 import com.example.library_management.entity.User;
 import com.example.library_management.exception.CustomIllegalStateException;
+import com.example.library_management.exception.NotLoggedInUserException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.BorrowRecordRepository;
 import com.example.library_management.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +30,14 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final ModelMapper mapper;
+    private  final  CheckLoginService checkLoginService;
 
     @Override
     public BorrowRecordDto borrow(long userId, long bookId) {
+     User authenticatedUser=  userRepository.findByUsername(checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()-> new ResourceNotFoundException("User of this name is not found"));
+     if( authenticatedUser.getId() !=userId){
+         throw  new NotLoggedInUserException(" This user is not Logged in");
+     }
         if (getTotalFines(userId) >= 500) {
             throw new IllegalStateException("Cannot borrow books with fines >= 500");
         }
@@ -55,6 +64,11 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
 
     @Override
     public BorrowRecordDto returnBook(long userId, long bookId) {
+        User authenticatedUser=  userRepository.findByUsername(checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()-> new ResourceNotFoundException("User of this name is not found"));
+        if( authenticatedUser.getId() !=userId){
+            throw  new NotLoggedInUserException(" This user is not Logged in");
+        }
+
         userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Book book = bookRepository.findBookById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
@@ -87,12 +101,20 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
 
     @Override
     public Double getTotalFines(Long userId) {
+        User authenticatedUser=  userRepository.findByUsername(checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()-> new ResourceNotFoundException("User of this name is not found"));
+        if(!Objects.equals(authenticatedUser.getId(), userId)){
+            throw  new NotLoggedInUserException(" This user is not Logged in");
+        }
         return borrowRecordRepository.findByUserIdAndFinePaidFalse(userId).stream().mapToDouble(BorrowRecord::getFineAmount).sum();
     }
 
     @Override
     public BorrowRecordDto payFine(Long borrowRecordId) {
         BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId).orElseThrow(() -> new ResourceNotFoundException("Borrow record not found"));
+        User authenticatedUser=  userRepository.findByUsername(checkLoginService.getCurrentAuthenticatedUsername()).orElseThrow(()-> new ResourceNotFoundException("User of this name is not found"));
+        if(!Objects.equals(authenticatedUser.getId(), borrowRecord.getUser().getId())){
+            throw  new NotLoggedInUserException(" This user is not Logged in");
+        }
 
         if (borrowRecord.getFineAmount() <= 0) {
             throw new CustomIllegalStateException("No fine to pay");
