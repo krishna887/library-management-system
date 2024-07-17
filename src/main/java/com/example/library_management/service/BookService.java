@@ -21,4 +21,5 @@ public interface BookService {
     List<BookResponseDto> findBookByIsbn(String isbn);
 
     Page<BookResponseDto> findAllBooks(int pageNo, int pageSize);
+    List<BookResponseDto> findAllBooks();
 }

@@ -60,5 +60,11 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).header("findAllBooks", "find_all_books header").body(GenericResponse.success(bookService.findAllBooks(pageNo, pageSize), "Fetching All the books", HttpStatus.OK, HttpStatus.OK.value()));
 
     }
+    @GetMapping("/find-all") //done by  admin
+    public ResponseEntity<GenericResponse<List<BookResponseDto>>> getAllBooks() {
+//        log.error("Inside controller {}", author);
+        return ResponseEntity.status(HttpStatus.OK).header("findAllBooks", "find_all_books header").body(GenericResponse.success(bookService.findAllBooks(), "Fetching All the books", HttpStatus.OK, HttpStatus.OK.value()));
+
+    }
 
 }
