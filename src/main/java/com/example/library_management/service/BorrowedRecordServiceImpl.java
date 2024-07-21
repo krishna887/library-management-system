@@ -140,4 +140,10 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
         List<BorrowRecord> borrowRecordList = borrowRecordRepository.findByUserIdAndFineAmountGreaterThan(userId, 0);
         return borrowRecordList.stream().map(borrowRecord -> mapper.map(borrowRecord, BorrowRecordDto.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<BorrowRecordDto> viewAllBorrowRecords() {
+        List<BorrowRecord> borrowRecordList= borrowRecordRepository.findAll();
+        return borrowRecordList.stream().map(borrowRecord -> mapper.map(borrowRecord, BorrowRecordDto.class)).collect(Collectors.toList());
+    }
 }

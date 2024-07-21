@@ -80,4 +80,10 @@ public class ReservationServiceImpl implements ReservationRecordService {
         List<ReservationRecord> reservationRecords = reservationRepository.findByUserId(userId);
         return reservationRecords.stream().map(reservationRecord -> mapper.map(reservationRecord, ReservationRecordDto.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<ReservationRecordDto> getAllReservations() {
+       List<ReservationRecord> reservationRecordList= reservationRepository.findAll();
+      return reservationRecordList.stream().map(reservationRecord -> mapper.map(reservationRecord, ReservationRecordDto.class)).collect(Collectors.toList());
+    }
 }

@@ -50,7 +50,7 @@ public class JwtServiceImpl implements JwtService {
 
     public String generateToken(String username) {
 
-        String token = Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))//for two minute
+        String token = Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60*5))//for five minute
                 .signWith(getSigninKey()).compact();
         return token;
     }

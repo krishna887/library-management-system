@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Data
 public class BorrowRecordDto {
 
-
+    private long id;
     private long userId;
     private long bookId;
     private LocalDate borrowDate;

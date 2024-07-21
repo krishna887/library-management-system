@@ -25,6 +25,10 @@ public class ReservationController {
     public ResponseEntity<GenericResponse<?>> getReservationRecords(@RequestParam long userId) {
         return ResponseEntity.status(HttpStatus.CREATED).header("reserved_record", "reserved record _header").body(GenericResponse.success(reservationRecordService.viewReservationsByUser(userId), "Get Reserve Record By User Id ", HttpStatus.OK, HttpStatus.OK.value()));
     }
+    @GetMapping("/all_reservations")
+    public ResponseEntity<GenericResponse<?>> getAllReservationRecords() {
+        return ResponseEntity.status(HttpStatus.CREATED).header("reserved_record", "reserved record _header").body(GenericResponse.success(reservationRecordService.getAllReservations(), "Get All Reservation Records ", HttpStatus.OK, HttpStatus.OK.value()));
+    }
 
 
 }

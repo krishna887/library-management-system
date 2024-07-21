@@ -22,5 +22,6 @@ public interface BorrowRecordService {
 
     List<BorrowRecordDto> getUserFines(Long userId);
 
+    List<BorrowRecordDto> viewAllBorrowRecords();
 }
 
