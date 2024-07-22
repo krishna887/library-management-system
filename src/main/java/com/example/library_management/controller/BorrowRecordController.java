@@ -42,4 +42,14 @@ public class BorrowRecordController {
     public ResponseEntity<GenericResponse<List<BorrowRecordDto>>> getBorrowRecord() {
         return ResponseEntity.status(HttpStatus.CREATED).header("borrow_record", "borrow _record _created _header").body(GenericResponse.success(borrowRecordService.viewAllBorrowRecords(), "Get All Borrow Record ", HttpStatus.OK, HttpStatus.OK.value()));
     }
+    @GetMapping("/borrow_record/{id}")
+    public ResponseEntity<GenericResponse<BorrowRecordDto>>getBorrowRecordById(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.OK).header("get_borrow_record_by_id", "borrow _record_getById _header").body(GenericResponse.success(borrowRecordService.getBorrowRecordById(id), "Get Borrow Record By Id ", HttpStatus.OK, HttpStatus.OK.value()));
+    }
+    @PutMapping("/update/borrow_record/{id}")
+    public ResponseEntity<GenericResponse<BorrowRecordDto>> updateBorrowRecord(@PathVariable long id, @RequestBody BorrowRecordDto borrowRecordDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).header("borrow_record", "borrow _record _created _header").body(GenericResponse.success(borrowRecordService.updateBorrowRecord(id,borrowRecordDto), "Update Borrow Record ", HttpStatus.OK, HttpStatus.OK.value()));
+    }
+
+
 }

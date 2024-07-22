@@ -146,4 +146,24 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
         List<BorrowRecord> borrowRecordList= borrowRecordRepository.findAll();
         return borrowRecordList.stream().map(borrowRecord -> mapper.map(borrowRecord, BorrowRecordDto.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public BorrowRecordDto getBorrowRecordById(long id) {
+      BorrowRecord borrowRecord=  borrowRecordRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Borrow Record Not found"));
+        return mapper.map(borrowRecord,BorrowRecordDto.class);
+    }
+
+    @Override
+    public BorrowRecordDto updateBorrowRecord(long id, BorrowRecordDto borrowRecordDto) {
+        BorrowRecord borrowRecord=  borrowRecordRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Borrow Record Not found"));
+        borrowRecord.getUser().setId(borrowRecordDto.getUserId());
+        borrowRecord.getBook().setId(borrowRecordDto.getBookId());
+        borrowRecord.setBorrowDate(borrowRecordDto.getBorrowDate());
+        borrowRecord.setReturnDate(borrowRecordDto.getReturnDate());
+        borrowRecord.setFineAmount(borrowRecordDto.getFineAmount());
+        borrowRecord.setFinePaid(borrowRecordDto.isFinePaid());
+        borrowRecord.setReturned(borrowRecord.isReturned());
+        borrowRecordRepository.save(borrowRecord);
+        return mapper.map(borrowRecord,BorrowRecordDto.class);
+    }
 }
