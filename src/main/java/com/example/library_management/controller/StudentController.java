@@ -32,5 +32,10 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userServiceImpl.updateUser(user), "Student updated Successfully", HttpStatus.ACCEPTED, HttpStatus.ACCEPTED.value()));
 
     }
+    @GetMapping("/getUserDetailsByName/{username}")
+    public  ResponseEntity<GenericResponse<UserResponseDto>> getByUsername(@PathVariable String username){
+        return ResponseEntity.status(HttpStatus.OK).header("custom", "custom header").body(GenericResponse.success(userServiceImpl.getUserByName(username), "Student Details Fetch Successfully", HttpStatus.OK, HttpStatus.OK.value()));
+
+    }
 
 }

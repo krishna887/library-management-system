@@ -55,8 +55,7 @@ private  final  CustomLogOutHandler customLogOutHandler;
                                 "api/all-borrow-record",
                                 "api/calculate/fine",
                                 "api/all/fines",
-                                "api/reserve/cancel",
-                                "api/all_reservation_record").hasAuthority("LIBRARIAN")
+                                "api/reserve/cancel").hasAuthority("LIBRARIAN")
                         .anyRequest().authenticated())
                 .userDetailsService(userService)
                 .exceptionHandling(e->e.accessDeniedHandler(customAccessDeniedHandler)

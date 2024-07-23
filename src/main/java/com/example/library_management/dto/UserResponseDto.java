@@ -9,12 +9,12 @@ import java.util.List;
 
 @Data
 public class UserResponseDto {
+    private  long id;
     private String username;
     private String email;
     private String name;
     private String contactDetails;
     private Role role;
-    private List<BorrowRecord> borrowRecords;
-    private List<ReservationRecord> reservations;
+
 
 }

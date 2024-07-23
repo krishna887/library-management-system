@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserResponseDto.class);
     }
 
+    @Override
+    public UserResponseDto getUserByName(String username) {
+      User user =userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User of this Id not found"));
+        return modelMapper.map(user, UserResponseDto.class);
+    }
+
 
     private String generatePassword() {
         return UUID.randomUUID().toString().replace('-', '.').substring(0, 8);
