@@ -11,4 +11,5 @@ public interface UserService {
 
     UserResponseDto updateUser(UserEditDto updatedUser);
 
+    UserResponseDto getUserByName(String username);
 }

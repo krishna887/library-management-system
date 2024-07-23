@@ -54,6 +54,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).header("findBooksByIsbn", "find-books-by-id").body(GenericResponse.success(bookService.findBookByIsbn(isbn), "Find Book by ISBN", HttpStatus.OK, HttpStatus.OK.value()));
     }
 
+    @GetMapping("/findBookById/{id}") // done by both
+    public ResponseEntity<GenericResponse<BookResponseDto>> findBooksById(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.OK).header("findBooksById", "find-books-by-id").body(GenericResponse.success(bookService.findBookById(id), "Find Book by Id", HttpStatus.OK, HttpStatus.OK.value()));
+    }
+
+
     @GetMapping("/find-all-books") //done by  admin
     public ResponseEntity<GenericResponse<Page<BookResponseDto>>> findAllBooks(@RequestParam int pageNo, @RequestParam int pageSize) {
 //        log.error("Inside controller {}", author);

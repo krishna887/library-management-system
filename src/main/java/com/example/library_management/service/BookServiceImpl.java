@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -110,6 +111,13 @@ public class BookServiceImpl implements BookService {
     public List<BookResponseDto> findAllBooks() {
         List<Book> bookList = bookRepository.findAll();
         return bookList.stream().map(book -> modelMapper.map(book, BookResponseDto.class)).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public BookResponseDto findBookById(long id) {
+      Book bookOptional=  bookRepository.findBookById(id).orElseThrow(()-> new ResourceNotFoundException("Book of this Id is not found"));
+     return modelMapper.map(bookOptional,BookResponseDto.class);
 
     }
 

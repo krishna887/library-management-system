@@ -11,4 +11,5 @@ public interface ReservationRecordService {
 
     List<ReservationRecordDto> viewReservationsByUser(Long userId);
 
+    List<ReservationRecordDto> getAllReservations();
 }

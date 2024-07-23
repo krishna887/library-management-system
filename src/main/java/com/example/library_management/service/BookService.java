@@ -5,6 +5,7 @@ import com.example.library_management.dto.BookResponseDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BookService {
@@ -22,4 +23,6 @@ public interface BookService {
 
     Page<BookResponseDto> findAllBooks(int pageNo, int pageSize);
     List<BookResponseDto> findAllBooks();
+
+    BookResponseDto findBookById(long id);
 }
