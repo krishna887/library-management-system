@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -73,7 +74,8 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
         Book book = bookRepository.findBookById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
         BorrowRecord borrowRecord = borrowRecordRepository.findByBookIdAndReturnDateIsNull(bookId).stream().filter(record -> record.getUser().getId().equals(userId)).findFirst().orElseThrow(() -> new IllegalStateException("Borrow record not found"));
-
+        //update the fine while returning the book
+//        borrowRecord.setFineAmount(calculateFine(borrowRecord.getId()));
         borrowRecord.setReturnDate(LocalDate.now());
         borrowRecord.setReturned(true);
         borrowRecordRepository.save(borrowRecord);
@@ -127,12 +129,16 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
 
     @Override
     public Double calculateFine(long borrowId) {
+
         BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowId).orElseThrow(() -> new ResourceNotFoundException("Borrow Id Not found"));
-        long daysOverdue = ChronoUnit.DAYS.between(borrowRecord.getBorrowDate(), borrowRecord.getReturnDate()) - 15; // Assuming a 15-day borrowing period
-        Double fine = daysOverdue > 0 ? daysOverdue * FINE_PER_DAY : 0;
-        borrowRecord.setFineAmount(fine);
-        borrowRecordRepository.save(borrowRecord);
-        return fine;
+        if(borrowRecord.getReturnDate()!=null ) {
+            long daysOverdue = ChronoUnit.DAYS.between(borrowRecord.getBorrowDate(), borrowRecord.getReturnDate()) - 15; // Assuming a 15-day borrowing period
+            Double fine = daysOverdue > 0 ? daysOverdue * FINE_PER_DAY : 0;
+            borrowRecord.setFineAmount(fine);
+            borrowRecordRepository.save(borrowRecord);
+            return fine;
+        }
+        else return 0.0;
     }
 
     @Override
@@ -162,7 +168,7 @@ public class BorrowedRecordServiceImpl implements BorrowRecordService {
         borrowRecord.setReturnDate(borrowRecordDto.getReturnDate());
         borrowRecord.setFineAmount(borrowRecordDto.getFineAmount());
         borrowRecord.setFinePaid(borrowRecordDto.isFinePaid());
-        borrowRecord.setReturned(borrowRecord.isReturned());
+        borrowRecord.setReturned(borrowRecordDto.isReturned());
         borrowRecordRepository.save(borrowRecord);
         return mapper.map(borrowRecord,BorrowRecordDto.class);
     }
