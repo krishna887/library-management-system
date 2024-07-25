@@ -28,6 +28,11 @@ public class GlobalExceptionHandling {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .header("illegal_state_exception","illegal state exception handling")
                 .body(GenericResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }@ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<GenericResponse<String>> handleException(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("illegal_state_exception","illegal state exception handling")
+                .body(GenericResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<GenericResponse<String>> handleException(ResourceNotFoundException e) {
