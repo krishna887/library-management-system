@@ -74,8 +74,8 @@ public class BookServiceImpl implements BookService {
             book1.setTitle(dto.getTitle());
             book1.setAuthor(dto.getAuthor());
             book1.setIsbn(dto.getIsbn());
-            book1.setAvailable(dto.isAvailable());
             book1.setCopiesAvailable(dto.getCopiesAvailable());
+            book1.setAvailable(book1.getCopiesAvailable() > 0);
             return bookRepository.save(book1);
         }).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
         return modelMapper.map(bookFromDb, BookResponseDto.class);

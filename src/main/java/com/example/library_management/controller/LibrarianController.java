@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,11 +26,14 @@ public class LibrarianController {
     @PostMapping("/login")
     public ResponseEntity<GenericResponse<AuthResponseDto>> login(@Valid @RequestBody LoginDto loginDto) {
 
-        AuthResponseDto authResponseDto = authService.authenticateLibrarian(loginDto);
-        return ResponseEntity.status(HttpStatus.CREATED).header("Authentication", authResponseDto.getToken()).body(GenericResponse.empty("Librarian login Success", HttpStatus.CREATED, HttpStatus.CREATED.value()));
+        AuthResponseDto authResponseDto = authService.authenticateUser(loginDto);
+        return ResponseEntity.status(HttpStatus.CREATED).header("Authentication", authResponseDto.getToken())
+                .body(GenericResponse.empty("Librarian login Success", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
     @PostMapping("/register/student")
     public ResponseEntity<GenericResponse<UserResponseDto>> registerUser(@Valid @RequestBody UserDto user) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).header("custom", "custom header").body(GenericResponse.success(userService.registerStudent(user), "Student Register Successful", HttpStatus.CREATED, HttpStatus.CREATED.value()));
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(GenericResponse.success(userService.registerStudent(user), "Student Register Successful", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
+
 }

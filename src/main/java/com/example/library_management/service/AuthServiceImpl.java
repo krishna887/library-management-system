@@ -6,7 +6,9 @@ import com.example.library_management.entity.Token;
 import com.example.library_management.entity.User;
 import com.example.library_management.repository.TokenRepository;
 import com.example.library_management.repository.UserRepository;
+import com.example.library_management.util.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -22,14 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final TokenRepository tokenRepository;
 
 
-    public AuthResponseDto authenticateLibrarian(LoginDto request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        String token = jwtService.generateToken(request.getUsername());
-        User user= userRepository.findByUsername(request.getUsername()).get();
-        revokeAllToken(user);
-        saveToken(user, token);
-        return new AuthResponseDto(token);
-    }
+
 
     private void revokeAllToken(User user) {
         List<Token> validateTokenlist= tokenRepository.findAllTokenByUser(user.getId());

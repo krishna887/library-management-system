@@ -10,8 +10,11 @@ import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.ReservationRecordRepository;
 import com.example.library_management.repository.UserRepository;
+import com.example.library_management.util.GenericResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -65,13 +68,13 @@ public class ReservationServiceImpl implements ReservationRecordService {
 
     @Override
     public String cancelReservation(Long reservationId) {
-        ReservationRecord reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+        ReservationRecord reservation = reservationRepository.findById(reservationId).
+                orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
         reservation.setActive(false);
         reservation.setCancelled(true);
         reservationRepository.save(reservation);
-        return "Reservation Cancel success ";
 
-
+       return  "Reservation Cancel Success";
     }
 
     @Override
@@ -83,7 +86,9 @@ public class ReservationServiceImpl implements ReservationRecordService {
 
     @Override
     public List<ReservationRecordDto> getAllReservations() {
-       List<ReservationRecord> reservationRecordList= reservationRepository.findAll();
-      return reservationRecordList.stream().map(reservationRecord -> mapper.map(reservationRecord, ReservationRecordDto.class)).collect(Collectors.toList());
+      List<ReservationRecord> reservationRecordList= reservationRepository.findAll();
+      return reservationRecordList.stream()
+              .map(reservationRecord -> mapper.map(reservationRecord, ReservationRecordDto.class))
+              .collect(Collectors.toList());
     }
 }

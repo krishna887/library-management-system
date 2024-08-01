@@ -29,14 +29,15 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final ModelMapper modelMapper;
-    private  final  CheckLoginService checkLoginService;
+    private final  CheckLoginService checkLoginService;
+    private  final PasswordGenerator passwordGenerator;
 
     public UserResponseDto registerStudent(UserDto userDto) {
         if ( userRepository.existsByUsername(userDto.getUsername())) {
             throw  new AlreadyExistException("User of this username Already exist");
         }
         User user = new User();
-        String password = generatePassword();
+        String password = passwordGenerator.generateRandomPassword(9);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(Role.STUDENT);
         user.setUsername(userDto.getUsername());
@@ -66,13 +67,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserByName(String username) {
-      User user =userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User of this Id not found"));
+      User user =userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User of this Name not found"));
         return modelMapper.map(user, UserResponseDto.class);
     }
 
-
-    private String generatePassword() {
-        return UUID.randomUUID().toString().replace('-', '.').substring(0, 8);
+    @Override
+    public UserResponseDto getUserById(long id) {
+        User user =userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User of this Id not found"));
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
 
