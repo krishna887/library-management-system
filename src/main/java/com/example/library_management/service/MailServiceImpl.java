@@ -15,7 +15,7 @@ public class MailServiceImpl implements  MailService{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Your Library Account Credentials");
-        message.setText("Username: " + username + "\nPassword: " + password +"\nLogin Link: http://localhost:4200/login?role=student");
+        message.setText("Username: " + username + "\nPassword: " + password +"\nLogin Link: http://localhost:4200/login");
         mailSender.send(message);
     }
 }

@@ -27,7 +27,8 @@ public class BookController {
 
     @PostMapping("/create")//done by librarian
     public ResponseEntity<GenericResponse<BookResponseDto>> createBook( @Valid @RequestBody BookRequestDto book) {
-        return ResponseEntity.status(HttpStatus.CREATED).header("custom header", "header can be passed herr").body(GenericResponse.success(bookService.createBook(book), "Book Created successfully", HttpStatus.CREATED, HttpStatus.CREATED.value()));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(GenericResponse.success(bookService.createBook(book), "Book Created successfully", HttpStatus.CREATED, HttpStatus.CREATED.value()));
     }
     @DeleteMapping("/delete")//done by librarian
     public ResponseEntity<GenericResponse<?>> deleteBook( @Valid @RequestBody BookRequestDto book) {

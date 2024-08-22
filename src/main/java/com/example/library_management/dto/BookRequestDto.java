@@ -16,7 +16,5 @@ public class BookRequestDto {
     @NotEmpty(message = "Isbn Should not be Empty")
     private String isbn;
 
-    private boolean isAvailable;
-
     private int copiesAvailable;
 }
